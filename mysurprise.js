@@ -18,31 +18,35 @@ function checkAnswer() {
         }, 1000); // Delay matches with CSS transition duration
     } else {
         // Show the error modal
-        const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-        errorModal.show();
+        showErrorModal();
     }
+}
+
+function showErrorModal() {
+    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    const modalContent = document.querySelector('.modal-content');
+    
+    modalContent.classList.add('bounceIn');
+    errorModal.show();
+    
+    // Remove animation class after animation ends
+    modalContent.addEventListener('animationend', () => {
+        modalContent.classList.remove('bounceIn');
+    }, { once: true });
 }
 
 // Function to generate random hearts
 function createHeart() {
     const heartContainer = document.querySelector('.heart-container');
     const heart = document.createElement('div');
-    heart.classList.add('heart');
-    
-    // Random color
-    heart.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 70%)`;
+    heart.className = 'heart';
+    heart.style.top = `${Math.random() * 100}vh`;
     heart.style.left = `${Math.random() * 100}vw`;
-    heart.style.bottom = `${Math.random() * 100}vh`; // Start at random height
-    heart.style.animationDelay = `${Math.random() * 5}s`;
-    heart.style.animationDuration = `${(Math.random() * 10) + 10}s`;
-
+    heart.style.animationDuration = `${Math.random() * 10 + 5}s`;
     heartContainer.appendChild(heart);
-
-    // Remove heart after animation ends
-    setTimeout(() => {
-        heart.remove();
-    }, 15000); // Matches with animation duration
 }
 
-// Create a heart every 500ms
-setInterval(createHeart, 500);
+// Create multiple hearts
+for (let i = 0; i < 20; i++) {
+    createHeart();
+}
